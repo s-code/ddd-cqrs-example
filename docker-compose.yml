@@ -1,0 +1,19 @@
+version: "3"
+services:
+  php:
+    build:
+      context: .
+    volumes:
+      - ./:/srv/app:rw,cached
+      - ./nginx/default.conf:/opt/docker/etc/nginx/conf.d/default.conf:rw
+    ports:
+      - "8080:80"
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"

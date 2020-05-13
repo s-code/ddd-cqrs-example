@@ -1,0 +1,20 @@
+amqp_extra:
+    routing:
+        dynamic:
+            class_map:
+                Booking\Domain\Event: event.booking
+                Booking\Application\Command: command.booking
+                Booking\Integration\NotificationService\Command: command.notification
+                Booking\Application\Query: query.booking
+    shared_transport:
+        commands:
+            routing: dynamic
+            default_bus: command_bus
+            headers_map:
+                Symfony\Component\Messenger\Stamp\BusNameStamp: bus-name
+        queries:
+            routing: dynamic
+            default_bus: query_bus
+        events:
+            routing: dynamic
+            default_bus: event_bus

@@ -1,0 +1,30 @@
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    Booking\Cli\:
+        resource: '../src/Cli/*'
+
+    Booking\Application\Command\:
+        resource: '../src/Application/Command/*Handler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: command_bus }
+
+    Booking\Application\Query\:
+        resource: '../src/Application/Query/*Handler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: query_bus }
+
+    Booking\Application\ProcessManager\SendConfirmationEmail:
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: event_bus }
+
+    Booking\Domain\BookingRepositoryInterface:
+        class: Booking\Infrastructure\Domain\BookingRepository
